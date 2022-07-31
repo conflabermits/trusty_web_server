@@ -1,7 +1,6 @@
-package main
+package httpfunctions
 
 import (
-	"flag"
 	"fmt"
 	"net/http"
 )
@@ -150,25 +149,4 @@ func headers(w http.ResponseWriter, req *http.Request) {
 			fmt.Fprintf(w, "%v: %v\n", name, h)
 		}
 	}
-}
-
-func main() {
-
-	port := flag.String("port", "8080", "Port to run the local web server")
-	flag.Parse()
-
-	http.HandleFunc("/ok", respond_ok)
-	http.HandleFunc("/degraded", respond_degraded)
-	http.HandleFunc("/outage", respond_outage)
-
-	http.HandleFunc("/200", respond_200)
-	http.HandleFunc("/301", respond_301)
-	http.HandleFunc("/302", respond_302)
-	http.HandleFunc("/401", respond_401)
-	http.HandleFunc("/404", respond_404)
-	http.HandleFunc("/500", respond_500)
-
-	http.HandleFunc("/headers", headers)
-
-	http.ListenAndServe(":"+*port, nil)
 }
