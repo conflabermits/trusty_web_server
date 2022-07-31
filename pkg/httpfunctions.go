@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func respond_ok(w http.ResponseWriter, req *http.Request) {
+func Respond_ok(w http.ResponseWriter, req *http.Request) {
 	ok_text := `{
     "components": [
         {
@@ -39,7 +39,7 @@ func respond_ok(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, ok_text)
 }
 
-func respond_degraded(w http.ResponseWriter, req *http.Request) {
+func Respond_degraded(w http.ResponseWriter, req *http.Request) {
 	degraded_text := `{
     "components": [
         {
@@ -73,7 +73,7 @@ func respond_degraded(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, degraded_text)
 }
 
-func respond_outage(w http.ResponseWriter, req *http.Request) {
+func Respond_outage(w http.ResponseWriter, req *http.Request) {
 	outage_text := `{
     "components": [
         {
@@ -107,42 +107,42 @@ func respond_outage(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, outage_text)
 }
 
-func respond_200(w http.ResponseWriter, req *http.Request) {
+func Respond_200(w http.ResponseWriter, req *http.Request) {
 
 	fmt.Fprintf(w, "\n")
 }
 
-func respond_401(w http.ResponseWriter, req *http.Request) {
+func Respond_401(w http.ResponseWriter, req *http.Request) {
 
 	w.WriteHeader(401)
 	fmt.Fprintf(w, "Not authorized\n")
 }
 
-func respond_404(w http.ResponseWriter, req *http.Request) {
+func Respond_404(w http.ResponseWriter, req *http.Request) {
 
 	w.WriteHeader(404)
 	fmt.Fprintf(w, "Page not found\n")
 }
 
-func respond_500(w http.ResponseWriter, req *http.Request) {
+func Respond_500(w http.ResponseWriter, req *http.Request) {
 
 	w.WriteHeader(500)
 	fmt.Fprintf(w, "Internal server error\n")
 }
 
-func respond_301(w http.ResponseWriter, req *http.Request) {
+func Respond_301(w http.ResponseWriter, req *http.Request) {
 
 	http.Redirect(w, req, "/200", 301)
 
 }
 
-func respond_302(w http.ResponseWriter, req *http.Request) {
+func Respond_302(w http.ResponseWriter, req *http.Request) {
 
 	http.Redirect(w, req, "/ok", 302)
 
 }
 
-func headers(w http.ResponseWriter, req *http.Request) {
+func Respond_headers(w http.ResponseWriter, req *http.Request) {
 
 	for name, headers := range req.Header {
 		for _, h := range headers {

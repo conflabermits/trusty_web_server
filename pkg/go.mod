@@ -1,3 +1,3 @@
-module github.com/trusty_web_server/httpfunctions
+module github.com/conflabermits/trusty_web_server/httpfunctions
 
 go 1.18
