@@ -24,26 +24,34 @@ It can be used for testing programs that make requests to a web server. The valu
 The web server can be run as-is using `go run`:
 
 ```text
-go run trusty_web_server.go
+$ go run main.go
+Server starting on http://localhost:8080
 ```
 
 It can also be compiled into a binary for easier portability:
 
 ```text
-go build trusty_web_server.go
+$ go build && ls -ln trusty_web_server
+-rwxr-xr-x 1 1000 1000 6579433 Oct  9 16:39 trusty_web_server
 ```
 
 In either case it will run on port 8080 by default.
 
-It takes `--port` as an optional argument, allowing you to specify which port the web server should be served on:
+It takes `-port` as an optional argument, allowing you to specify which port the web server should be served on:
 
 ```text
-go run trusty_web_server.go --port 38080
+$ go run main.go -port 48080
+Server starting on http://localhost:48080
+```
+
+```text
+$ ./trusty_web_server -port 48080
+Server starting on http://localhost:48080
 ```
 
 ## Resources and References
 
-* [Stream Notes](https://github.com/conflabermits/Scripts/blob/main/stream/pilot/002/notes.md)
+* Stream Notes [002](https://github.com/conflabermits/Scripts/blob/main/stream/pilot/002/notes.md), [013](https://github.com/conflabermits/Scripts/blob/main/stream/pilot/013/notes.md)
 * [Example HTTP server code](https://gobyexample.com/http-servers)
 * [List of HTTP status codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
 * [How to set HTTP status code in response in Go](https://golangbyexample.com/set-http-status-code-golang/)
