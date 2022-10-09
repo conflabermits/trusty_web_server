@@ -21,17 +21,17 @@ func loadText(file string) string {
 
 func Respond_ok(w http.ResponseWriter, req *http.Request) {
 	ok_text := loadText("static/appname-OK.json")
-	fmt.Fprintf(w, ok_text)
+	fmt.Fprintln(w, ok_text)
 }
 
 func Respond_degraded(w http.ResponseWriter, req *http.Request) {
 	degraded_text := loadText("static/appname-DEGRADED.json")
-	fmt.Fprintf(w, degraded_text)
+	fmt.Fprintln(w, degraded_text)
 }
 
 func Respond_outage(w http.ResponseWriter, req *http.Request) {
 	outage_text := loadText("static/appname-OUTAGE.json")
-	fmt.Fprintf(w, outage_text)
+	fmt.Fprintln(w, outage_text)
 }
 
 func Respond_200(w http.ResponseWriter, req *http.Request) {
