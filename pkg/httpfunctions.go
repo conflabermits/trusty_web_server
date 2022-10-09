@@ -1,31 +1,36 @@
 package httpfunctions
 
 import (
+	"embed"
 	"fmt"
 	"net/http"
 	"os"
 )
 
+//go:embed static
+var content embed.FS
+
 func loadText(file string) string {
-	content, err := os.ReadFile(file)
+
+	contents, err := content.ReadFile(file)
 	if err != nil {
 		os.Exit(7)
 	}
-	return string(content)
+	return string(contents)
 }
 
 func Respond_ok(w http.ResponseWriter, req *http.Request) {
-	ok_text := loadText("pkg/appname-OK.json")
+	ok_text := loadText("static/appname-OK.json")
 	fmt.Fprintf(w, ok_text)
 }
 
 func Respond_degraded(w http.ResponseWriter, req *http.Request) {
-	degraded_text := loadText("pkg/appname-DEGRADED.json")
+	degraded_text := loadText("static/appname-DEGRADED.json")
 	fmt.Fprintf(w, degraded_text)
 }
 
 func Respond_outage(w http.ResponseWriter, req *http.Request) {
-	outage_text := loadText("pkg/appname-OUTAGE.json")
+	outage_text := loadText("static/appname-OUTAGE.json")
 	fmt.Fprintf(w, outage_text)
 }
 
