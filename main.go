@@ -2,10 +2,10 @@ package main
 
 import (
 	"flag"
-        "fmt"
+	"fmt"
 	"net/http"
 
-	"github.com/conflabermits/trusty_web_server/httpfunctions"
+	"httpfunctions"
 )
 
 func main() {
@@ -26,6 +26,6 @@ func main() {
 
 	http.HandleFunc("/headers", httpfunctions.Respond_headers)
 
-        fmt.Printf("Server starting on http://localhost:"+*port+"\n")
+	fmt.Printf("Server starting on http://localhost:" + *port + "\n")
 	http.ListenAndServe(":"+*port, nil)
 }
