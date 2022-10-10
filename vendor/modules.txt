@@ -1,4 +1,4 @@
-# httpfunctions v1.0.0 => ./pkg
+# httpfunctions v1.0.0 => ./vendor
 ## explicit; go 1.18
 httpfunctions
-# httpfunctions => ./pkg
+# httpfunctions => ./vendor
