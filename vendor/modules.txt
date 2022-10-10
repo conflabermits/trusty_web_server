@@ -1,4 +1,4 @@
-# github.com/conflabermits/trusty_web_server/httpfunctions v1.0.0 => ./pkg
+# httpfunctions v1.0.0 => ./pkg
 ## explicit; go 1.18
-github.com/conflabermits/trusty_web_server/httpfunctions
-# github.com/conflabermits/trusty_web_server/httpfunctions => ./pkg
+httpfunctions
+# httpfunctions => ./pkg
