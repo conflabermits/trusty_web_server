@@ -18,6 +18,7 @@ It can be used for testing programs that make requests to a web server. The valu
 | [/404](http://localhost:8080/404) | 404 | "Page not found" |  |
 | [/500](http://localhost:8080/500) | 500 | "Internal server error" |  |
 | [/headers](http://localhost:8080/headers) | 200 | Client headers |  |
+| [/delay](http://localhost:8080/delay) | 200 | Info about the delay | Delay for N seconds (default 1; query arg like `?delay=2`) |
 
 ## Running the server
 

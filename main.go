@@ -25,6 +25,7 @@ func main() {
 	http.HandleFunc("/500", httpfunctions.Respond_500)
 
 	http.HandleFunc("/headers", httpfunctions.Respond_headers)
+	http.HandleFunc("/delay", httpfunctions.Respond_delay)
 
 	fmt.Printf("Server starting on http://localhost:%s\n", *port)
 	http.ListenAndServe(":"+*port, nil)

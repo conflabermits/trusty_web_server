@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
+	"time"
 )
 
 //go:embed static
@@ -67,4 +69,19 @@ func Respond_headers(w http.ResponseWriter, req *http.Request) {
 			fmt.Fprintf(w, "%v: %v\n", name, h)
 		}
 	}
+}
+
+func Respond_delay(w http.ResponseWriter, req *http.Request) {
+	delay := req.URL.Query().Get("delay")
+	if delay == "" {
+		delay = "1"
+	}
+	delaySeconds, err := strconv.Atoi(delay)
+	if err != nil {
+		http.Error(w, "Invalid delay value", http.StatusBadRequest)
+		return
+	}
+	fmt.Fprintf(w, "Delaying for %d seconds starting at %s\n", delaySeconds, time.Now().Format(time.RFC3339))
+	time.Sleep(time.Duration(delaySeconds) * time.Second)
+	fmt.Fprintf(w, "Done delaying at %s\n", time.Now().Format(time.RFC3339))
 }
