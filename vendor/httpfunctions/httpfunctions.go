@@ -3,6 +3,7 @@ package httpfunctions
 import (
 	"embed"
 	"fmt"
+	"math/rand"
 	"net/http"
 	"os"
 	"strconv"
@@ -21,13 +22,30 @@ func loadText(file string) string {
 	return string(contents)
 }
 
-func DelayMiddleware(next http.Handler) http.Handler {
+func HTTPMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		delay := r.URL.Query().Get("delay")
 		if delay != "" {
 			delaySeconds, err := strconv.Atoi(delay)
 			if err == nil {
 				time.Sleep(time.Duration(delaySeconds) * time.Second)
+			}
+		}
+		failrate := r.URL.Query().Get("failrate")
+		if failrate != "" {
+			failratePercent, err := strconv.Atoi(failrate)
+			if err == nil {
+				if failratePercent > 0 && failratePercent <= 100 {
+					randomNumber := rand.Intn(100) + 1
+					w.Header().Set("X-Failrate-Percent", strconv.Itoa(failratePercent))
+					w.Header().Set("X-Random-Number", strconv.Itoa(randomNumber))
+					if randomNumber < failratePercent {
+						w.WriteHeader(500)
+						fmt.Fprintf(w, "Internal server error - Request failed successfully\n")
+						fmt.Fprintf(w, "Failrate: %d\nRandom Number: %d\n", failratePercent, randomNumber)
+						return
+					}
+				}
 			}
 		}
 		next.ServeHTTP(w, r)
