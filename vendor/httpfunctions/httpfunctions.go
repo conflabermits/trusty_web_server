@@ -21,6 +21,19 @@ func loadText(file string) string {
 	return string(contents)
 }
 
+func DelayMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		delay := r.URL.Query().Get("delay")
+		if delay != "" {
+			delaySeconds, err := strconv.Atoi(delay)
+			if err == nil {
+				time.Sleep(time.Duration(delaySeconds) * time.Second)
+			}
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
 func Respond_ok(w http.ResponseWriter, req *http.Request) {
 	ok_text := loadText("static/appname-OK.json")
 	fmt.Fprintln(w, ok_text)
