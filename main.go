@@ -26,6 +26,6 @@ func main() {
 
 	http.HandleFunc("/headers", httpfunctions.Respond_headers)
 
-	fmt.Printf("Server starting on http://localhost:" + *port + "\n")
+	fmt.Printf("Server starting on http://localhost:%s\n", *port)
 	http.ListenAndServe(":"+*port, nil)
 }
