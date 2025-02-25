@@ -19,7 +19,7 @@ It can be used for testing programs that make requests to a web server. The valu
 | [/500](http://localhost:8080/500) | 500 | "Internal server error" |  |
 | [/headers](http://localhost:8080/headers) | 200 | Client headers |  |
 | [?delay=N](http://localhost:8080/200?delay=3) | * | * | Delay for N seconds |
-| [?failrate=N](http://localhost:8080/200?failrate=50) | * | * | N% change request will fail |
+| [?failrate=N](http://localhost:8080/200?failrate=50) | * | * | N% of requests will fail |
 
 ## Running the server
 

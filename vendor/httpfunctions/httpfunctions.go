@@ -42,8 +42,8 @@ func HTTPMiddleware(next http.Handler) http.Handler {
 					randomNumber := rand.Intn(100) + 1
 					w.Header().Set("X-Failrate-Percent", strconv.Itoa(failratePercent))
 					w.Header().Set("X-Random-Number", strconv.Itoa(randomNumber))
-					log.Printf("Fail check. Request must beat a %d to fail. Request rolled a D100 and got %d.\n", randomNumber, failratePercent)
-					if randomNumber < failratePercent {
+					log.Printf("Fail check: FAIL if failratePercent > randomNumber. Requested failratePercent is %d. System generated randomNumber %d.\n", failratePercent, randomNumber)
+					if failratePercent > randomNumber {
 						w.WriteHeader(500)
 						fmt.Fprintf(w, "Internal server error - Request failed successfully\n")
 						return
