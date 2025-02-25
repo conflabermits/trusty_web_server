@@ -3,8 +3,12 @@ package httpfunctions
 import (
 	"embed"
 	"fmt"
+	"log"
+	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
+	"time"
 )
 
 //go:embed static
@@ -17,6 +21,38 @@ func loadText(file string) string {
 		os.Exit(7)
 	}
 	return string(contents)
+}
+
+func HTTPMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		delay := r.URL.Query().Get("delay")
+		if delay != "" {
+			delaySeconds, err := strconv.Atoi(delay)
+			if err == nil {
+				log.Printf("Delaying request for %d seconds.\n", delaySeconds)
+				w.Header().Set("X-Delay-Seconds", strconv.Itoa(delaySeconds))
+				time.Sleep(time.Duration(delaySeconds) * time.Second)
+			}
+		}
+		failrate := r.URL.Query().Get("failrate")
+		if failrate != "" {
+			failratePercent, err := strconv.Atoi(failrate)
+			if err == nil {
+				if failratePercent > 0 && failratePercent <= 100 {
+					randomNumber := rand.Intn(100) + 1
+					w.Header().Set("X-Failrate-Percent", strconv.Itoa(failratePercent))
+					w.Header().Set("X-Random-Number", strconv.Itoa(randomNumber))
+					log.Printf("Fail check: FAIL if failratePercent > randomNumber. Requested failratePercent is %d. System generated randomNumber %d.\n", failratePercent, randomNumber)
+					if failratePercent > randomNumber {
+						w.WriteHeader(500)
+						fmt.Fprintf(w, "Internal server error - Request failed successfully\n")
+						return
+					}
+				}
+			}
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 func Respond_ok(w http.ResponseWriter, req *http.Request) {
