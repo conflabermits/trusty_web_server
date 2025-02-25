@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"log"
 	"net/http"
 
 	"httpfunctions"
@@ -24,8 +24,7 @@ func main() {
 	http.Handle("/500", httpfunctions.HTTPMiddleware(http.HandlerFunc(httpfunctions.Respond_500)))
 
 	http.Handle("/headers", httpfunctions.HTTPMiddleware(http.HandlerFunc(httpfunctions.Respond_headers)))
-	http.HandleFunc("/delay", httpfunctions.Respond_delay)
 
-	fmt.Printf("Server starting on http://localhost:%s\n", *port)
+	log.Printf("Server starting on http://localhost:%s\n", *port)
 	http.ListenAndServe(":"+*port, nil)
 }

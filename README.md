@@ -18,7 +18,8 @@ It can be used for testing programs that make requests to a web server. The valu
 | [/404](http://localhost:8080/404) | 404 | "Page not found" |  |
 | [/500](http://localhost:8080/500) | 500 | "Internal server error" |  |
 | [/headers](http://localhost:8080/headers) | 200 | Client headers |  |
-| [/delay](http://localhost:8080/delay) | 200 | Info about the delay | Delay for N seconds (default 1; query arg like `?delay=2`) |
+| [?delay=N](http://localhost:8080/200?delay=3) | * | * | Delay for N seconds |
+| [?failrate=N](http://localhost:8080/200?failrate=50) | * | * | N% change request will fail |
 
 ## Running the server
 
@@ -26,7 +27,7 @@ The web server can be run as-is using `go run`:
 
 ```text
 $ go run main.go
-Server starting on http://localhost:8080
+2025/02/24 22:18:30 Server starting on http://localhost:8080
 ```
 
 It can also be compiled into a binary for easier portability:
@@ -42,12 +43,12 @@ It takes `-port` as an optional argument, allowing you to specify which port the
 
 ```text
 $ go run main.go -port 48080
-Server starting on http://localhost:48080
+2025/02/24 22:18:30 Server starting on http://localhost:48080
 ```
 
 ```text
 $ ./trusty_web_server -port 48080
-Server starting on http://localhost:48080
+2025/02/24 22:18:30 Server starting on http://localhost:48080
 ```
 
 ## Resources and References
