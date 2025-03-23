@@ -51,8 +51,34 @@ func HTTPMiddleware(next http.Handler) http.Handler {
 				}
 			}
 		}
+		log.Printf("Request received for %s\n", r.URL)
 		next.ServeHTTP(w, r)
 	})
+}
+
+func RegisterStatusCodeHandlers(mux *http.ServeMux) {
+	for code := 100; code < 600; code++ {
+		mux.Handle(fmt.Sprintf("/%d", code), HTTPMiddleware(http.HandlerFunc(func(code int) http.HandlerFunc {
+			return func(w http.ResponseWriter, r *http.Request) {
+				//log.Printf("Processing for code %d\n", code)
+				switch code {
+				case 218:
+					w.WriteHeader(218)
+					fmt.Fprintf(w, "This is fine\nhttps://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Unofficial_codes\n")
+				case 301, 302, 303, 307, 308:
+					http.Redirect(w, r, "/200", code)
+				case 420:
+					w.WriteHeader(420)
+					fmt.Fprintf(w, "Enhance your calm\nhttps://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Unofficial_codes\n")
+				case 530:
+					w.WriteHeader(530)
+					fmt.Fprintf(w, "Site is frozen\nhttps://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Unofficial_codes\n")
+				default:
+					http.Error(w, http.StatusText(code), code)
+				}
+			}
+		}(code))))
+	}
 }
 
 func Respond_ok(w http.ResponseWriter, req *http.Request) {
@@ -68,33 +94,6 @@ func Respond_degraded(w http.ResponseWriter, req *http.Request) {
 func Respond_outage(w http.ResponseWriter, req *http.Request) {
 	outage_text := loadText("static/appname-OUTAGE.json")
 	fmt.Fprintln(w, outage_text)
-}
-
-func Respond_200(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprintf(w, "\n")
-}
-
-func Respond_401(w http.ResponseWriter, req *http.Request) {
-	w.WriteHeader(401)
-	fmt.Fprintf(w, "Not authorized\n")
-}
-
-func Respond_404(w http.ResponseWriter, req *http.Request) {
-	w.WriteHeader(404)
-	fmt.Fprintf(w, "Page not found\n")
-}
-
-func Respond_500(w http.ResponseWriter, req *http.Request) {
-	w.WriteHeader(500)
-	fmt.Fprintf(w, "Internal server error\n")
-}
-
-func Respond_301(w http.ResponseWriter, req *http.Request) {
-	http.Redirect(w, req, "/200", http.StatusMovedPermanently)
-}
-
-func Respond_302(w http.ResponseWriter, req *http.Request) {
-	http.Redirect(w, req, "/ok", http.StatusFound)
 }
 
 func Respond_headers(w http.ResponseWriter, req *http.Request) {
