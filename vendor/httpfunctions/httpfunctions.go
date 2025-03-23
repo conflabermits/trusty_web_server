@@ -51,8 +51,34 @@ func HTTPMiddleware(next http.Handler) http.Handler {
 				}
 			}
 		}
+		log.Printf("Request received for %s\n", r.URL)
 		next.ServeHTTP(w, r)
 	})
+}
+
+func RegisterStatusCodeHandlers(mux *http.ServeMux) {
+	for code := 100; code < 600; code++ {
+		mux.Handle(fmt.Sprintf("/%d", code), HTTPMiddleware(http.HandlerFunc(func(code int) http.HandlerFunc {
+			return func(w http.ResponseWriter, r *http.Request) {
+				//log.Printf("Processing for code %d\n", code)
+				switch code {
+				case 218:
+					w.WriteHeader(218)
+					fmt.Fprintf(w, "This is fine\nhttps://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Unofficial_codes\n")
+				case 301, 302, 303, 307, 308:
+					http.Redirect(w, r, "/200", code)
+				case 420:
+					w.WriteHeader(420)
+					fmt.Fprintf(w, "Enhance your calm\nhttps://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Unofficial_codes\n")
+				case 530:
+					w.WriteHeader(530)
+					fmt.Fprintf(w, "Site is frozen\nhttps://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Unofficial_codes\n")
+				default:
+					http.Error(w, http.StatusText(code), code)
+				}
+			}
+		}(code))))
+	}
 }
 
 func Respond_ok(w http.ResponseWriter, req *http.Request) {
