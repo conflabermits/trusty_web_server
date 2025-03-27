@@ -25,6 +25,7 @@ func loadText(file string) string {
 
 func HTTPMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("Request received for %s\n", r.URL)
 		delay := r.URL.Query().Get("delay")
 		if delay != "" {
 			delaySeconds, err := strconv.Atoi(delay)
@@ -51,14 +52,13 @@ func HTTPMiddleware(next http.Handler) http.Handler {
 				}
 			}
 		}
-		log.Printf("Request received for %s\n", r.URL)
 		next.ServeHTTP(w, r)
 	})
 }
 
 func RegisterStatusCodeHandlers(mux *http.ServeMux) {
 	for code := 100; code < 600; code++ {
-		mux.Handle(fmt.Sprintf("/%d", code), HTTPMiddleware(http.HandlerFunc(func(code int) http.HandlerFunc {
+		mux.Handle(fmt.Sprintf("/%d", code), http.HandlerFunc(func(code int) http.HandlerFunc {
 			return func(w http.ResponseWriter, r *http.Request) {
 				//log.Printf("Processing for code %d\n", code)
 				switch code {
@@ -77,7 +77,7 @@ func RegisterStatusCodeHandlers(mux *http.ServeMux) {
 					http.Error(w, http.StatusText(code), code)
 				}
 			}
-		}(code))))
+		}(code)))
 	}
 }
 

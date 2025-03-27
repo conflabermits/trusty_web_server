@@ -15,13 +15,15 @@ func main() {
 	mux := http.NewServeMux()
 	httpfunctions.RegisterStatusCodeHandlers(mux)
 
-	mux.Handle("/ok", httpfunctions.HTTPMiddleware(http.HandlerFunc(httpfunctions.Respond_ok)))
-	mux.Handle("/degraded", httpfunctions.HTTPMiddleware(http.HandlerFunc(httpfunctions.Respond_degraded)))
-	mux.Handle("/outage", httpfunctions.HTTPMiddleware(http.HandlerFunc(httpfunctions.Respond_outage)))
-	mux.Handle("/headers", httpfunctions.HTTPMiddleware(http.HandlerFunc(httpfunctions.Respond_headers)))
+	mux.Handle("/ok", http.HandlerFunc(httpfunctions.Respond_ok))
+	mux.Handle("/degraded", http.HandlerFunc(httpfunctions.Respond_degraded))
+	mux.Handle("/outage", http.HandlerFunc(httpfunctions.Respond_outage))
+	mux.Handle("/headers", http.HandlerFunc(httpfunctions.Respond_headers))
+
+	handler := httpfunctions.HTTPMiddleware(mux)
 
 	log.Printf("Server starting on http://localhost:%s\n", *port)
-	if err := http.ListenAndServe(":"+*port, mux); err != nil {
+	if err := http.ListenAndServe(":"+*port, handler); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }
