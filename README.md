@@ -11,13 +11,10 @@ It can be used for testing programs that make requests to a web server. The valu
 | [/ok](http://localhost:8080/ok) | 200 | Health check response: "OK" |  |
 | [/degraded](http://localhost:8080/degraded) | 200 | Health check response: "Degraded" |  |
 | [/outage](http://localhost:8080/outage) | 200 | Health check response: "Outage" |  |
-| [/200](http://localhost:8080/200) | 200 | (Blank page) |  |
-| [/301](http://localhost:8080/301) | 301 | | Redirect to "/200" |
-| [/302](http://localhost:8080/302) | 302 | | Redirect to "/ok" |
-| [/401](http://localhost:8080/401) | 401 | "Not authorized" |  |
-| [/404](http://localhost:8080/404) | 404 | "Page not found" |  |
-| [/500](http://localhost:8080/500) | 500 | "Internal server error" |  |
 | [/headers](http://localhost:8080/headers) | 200 | Client headers |  |
+| [/N](http://localhost:8080/200) | N | Trigger specific HTTP codes by request (e.g., "/200" returns a 200) |  |
+| [/301, /302, /303, /307, /308](http://localhost:8080/301) | N | | Redirect to "/200" |
+| [/218, /420, /530](http://localhost:8080/218) | N | [Unofficial HTTP code responses](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Unofficial_codes) | |
 | [?delay=N](http://localhost:8080/200?delay=3) | * | * | Delay for N seconds |
 | [?failrate=N](http://localhost:8080/200?failrate=50) | * | * | N% of requests will fail |
 
